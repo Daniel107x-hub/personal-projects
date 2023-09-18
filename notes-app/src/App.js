@@ -1,6 +1,4 @@
-import Sidebar from "./components/Sidebar";
-import SmallNote from "./components/SmallNote";
-import Note from "./components/Note";
+import React, {useState} from 'react'
 
 const notes = [
   {
@@ -34,18 +32,40 @@ const notes = [
 ];
 
 function App() {
-  const renderedNotes = notes.map((note) => <SmallNote note={note} />);
+  const [selectedNote, setSelectedNote] = useState(null);
+  const handleSelectedNote = (note) => {
+     setSelectedNote(note);
+  }
+  const renderedNotes = notes.map((note) => <SmallNote note={note} onClick={() => handleSelectedNote(note)}/>);
   return (
-    <div className="flex flex-col">
-      <section className="p-5">Notes app</section>
-      <section className=" grid grid-cols-3 max-h-[90vh]">
-        <div className="col-span-2 p-2 max-h-[90vh]">
-          <Note note={notes[3]} />
+    <div className="flex flex-col h-screen">
+      <div className="p-5 bg-indigo-300 text-white text-xl font-bold">Notes app</div>
+      <div className="flex flex-row flex-1 max-h-[90vh]">
+        <div className="grow p-4">
+          <Note note={selectedNote}/>
         </div>
-        <div className="col-span-1 p-2 max-h-[90vh] overflow-y-scroll">
-          <Sidebar>{renderedNotes}</Sidebar>
-        </div>
-      </section>
+        <div className="max-w-sm p-4 overflow-auto">{renderedNotes}</div>
+      </div>
+    </div>
+  );
+}
+
+function Note({note}){
+  if(!note) return <div className="bg-yellow-100 rounded-2xl p-4">Start by selecting a note...</div>
+  return(
+    <div className="bg-yellow-100 rounded-2xl p-4">
+      <h1 className="text-lg font-bold mb-3">{note.title}</h1>
+      <p className="max-h-[40vh] overflow-auto mb-3">{note.content}</p>  
+      <h2>Created: 2020-02-10</h2>          
+    </div>
+  )
+}
+
+function SmallNote({ note, ...rest }) {
+  return (
+    <div className="bg-yellow-200 hover:bg-yellow-300 rounded-xl mb-2 p-3 cursor-pointer" {...rest}>
+      <h1 className="font-bold mb-2">{note.title}</h1>
+      <p className="line-clamp-5">{note.content}</p>
     </div>
   );
 }
