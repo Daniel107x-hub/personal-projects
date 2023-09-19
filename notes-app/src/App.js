@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import ReactDOM from 'react-dom'
+import {v4 as uuidv4} from 'uuid';
 
 function App() {
   const [notes, setNotes] = useState([]);
@@ -25,7 +26,7 @@ function App() {
   const handleCreateNote = () => {
     const createdDate = new Date();
     const note = {
-      id: 1,
+      id: uuidv4(),
       title: noteTitle,
       content: noteContent,
       created: createdDate
@@ -38,7 +39,7 @@ function App() {
 
   const renderedNotes = notes.map((note) => <SmallNote note={note} key={note.id} onClick={() => handleSelectedNote(note)}/>);
   
-  const actionBar = <div className='text-indigo-700 font-bold flex flex-row justify-between'>
+  const actionBar = <div className='text-indigo-700 font-bold flex flex-row justify-between mt-5'>
     <button className='bg-red-200 p-3 rounded-xl hover:bg-red-300' onClick={handleCancelNote}>Cancel</button>
     <button className='bg-yellow-100 p-3 rounded-xl hover:bg-yellow-500' onClick={handleCreateNote}>Create note</button>
   </div>
@@ -64,9 +65,19 @@ function App() {
       <div className="p-5 bg-indigo-300 text-white text-xl font-bold">Notes</div>
       <div className="flex flex-row flex-1 max-h-[90vh]">
         <div className="grow p-4">
-          <Note note={selectedNote}/>
+          {
+            selectedNote &&
+            <Note note={selectedNote}/>
+          }
+          {
+            !selectedNote &&
+            <div className='bg-yellow-200 rounded-lg p-3'>Start by creating and selecting a new note!</div>
+          }
         </div>
-        <div className="max-w-sm p-4 overflow-auto">{renderedNotes}</div>
+        {
+          renderedNotes.length > 0 &&
+          <div className="max-w-sm p-4 overflow-auto">{renderedNotes}</div>
+        }
       </div>
       <span className="w-fit p-4 absolute bottom-0 right-0 m-2 rounded-full bg-yellow-200 hover:bg-yellow-300 cursor-pointer" onClick={handleAddNote}>Add note</span>
     </div>
@@ -74,7 +85,6 @@ function App() {
 }
 
 function Note({note}){
-  if(!note) return <div className="bg-yellow-100 rounded-2xl p-4">Start by selecting a note...</div>
   return(
     <div className="bg-yellow-100 rounded-2xl p-4">
       <h1 className="text-lg font-bold mb-3">{note.title}</h1>
@@ -100,8 +110,8 @@ function Modal({children, onClose, actionBar}){
   },[])
   return ReactDOM.createPortal(
     <div>
-      <div onClick={onClose} className='fixed inset-0 bg-gray-300 opacity-80'></div>
-        <div className="fixed inset-x-40 inset-y-96 p-10 bg-yellow-300 rounded-lg">
+      <div onClick={onClose} className='fixed inset-0 bg-gray-300 opacity-80 flex'></div>
+        <div className="fixed top-[50%] left-[50%] translate-y-[-50%] translate-x-[-50%] p-10 bg-yellow-300 rounded-lg">
             <div className='flex flex-col justify-between h-full'>
                 {children}
                 <div>
