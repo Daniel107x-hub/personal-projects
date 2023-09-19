@@ -62,7 +62,7 @@ function App() {
     })
     setNotes(updatedNotes);
     setSelectedNote(updatedNote);
-    toast("Note updated")
+    toast.success("Note updated")
   }
 
   const renderedNotes = notes.map((note) => <SmallNote note={note} key={note.id} onClick={() => handleSelectedNote(note)} onDelete={handleDeleteNote}/>);
