@@ -15,10 +15,21 @@ function App() {
   const [isAddingNote, setIsAddingNote] = useState(false);
   const [noteTitle, setNoteTitle] = useState("");
   const [noteContent, setNoteContent] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredNotes, setFilteredNotes] = useState([]);
 
   useEffect(() => {
     localStorage.setItem('notes', JSON.stringify(notes)); // Update notes on the local storage
   }, [notes])
+
+  useEffect(() => {
+    if(!searchTerm) {
+      setFilteredNotes(notes);
+      return;
+    }
+    const filtered = notes.filter(note => note.title.toLowerCase().startsWith(searchTerm.toLowerCase()));
+    setFilteredNotes(filtered);
+  }, [searchTerm, notes])
 
   const handleSelectedNote = (note) => {
     setSelectedNote(note);
@@ -65,7 +76,7 @@ function App() {
     toast.success("Note updated", {position: toast.POSITION.BOTTOM_LEFT})
   }
 
-  const renderedNotes = notes.map((note) => <SmallNote note={note} key={note.id} onClick={() => handleSelectedNote(note)} onDelete={handleDeleteNote}/>);
+  const renderedNotes = filteredNotes.map((note) => <SmallNote note={note} key={note.id} onClick={() => handleSelectedNote(note)} onDelete={handleDeleteNote}/>);
   
   const actionBar = <div className='text-indigo-700 font-bold flex flex-row justify-between mt-5'>
     <button className='bg-red-200 p-3 rounded-xl hover:bg-red-300' onClick={handleCancelNote}>Cancel</button>
@@ -90,7 +101,7 @@ function App() {
       {
         isAddingNote && addNoteModal
       }
-      <div className="p-5 bg-indigo-300 text-white text-xl font-bold">Notes</div>
+      <div className="p-5 bg-indigo-300 text-xl font-bold">Notes</div>
       <div className="flex flex-row flex-1 max-h-[90vh]">
         <div className="grow p-4">
           {
@@ -103,11 +114,18 @@ function App() {
           }
         </div>
         {
-          renderedNotes.length > 0 &&
-          <div className="min-w-sm max-w-sm p-4 overflow-auto">{renderedNotes}</div>
+          <div className="min-w-sm max-w-sm p-4 overflow-auto">
+            <div className='mb-3'>
+              <input type="text" placeholder='Title...' className='bg-sky-100 w-full p-3 text-orange-700 font-semibold rounded-xl outline-orange-400' onChange={(e) => setSearchTerm(e.target.value)}/>
+            </div>
+            <div className='flex justify-center flex-col'>
+              {renderedNotes.length > 0 && renderedNotes}
+              {renderedNotes.length === 0 && <div className='bg-red-100 p-4 rounded-lg'>Yo have no notes to show</div>}
+            </div>
+          </div>
         }
       </div>
-      <span className="w-fit p-4 absolute bottom-0 right-0 m-2 rounded-full bg-yellow-200 hover:bg-yellow-300 cursor-pointer" onClick={handleAddNote}>Add note</span>
+      <span className="w-fit p-4 absolute bottom-0 right-0 m-2 rounded-full bg-yellow-300 hover:bg-yellow-400 cursor-pointer" onClick={handleAddNote}>Add note</span>
       <ToastContainer/>
     </div>
   );
