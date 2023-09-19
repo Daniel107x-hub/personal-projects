@@ -82,7 +82,7 @@ function App() {
         <div className="grow p-4">
           {
             selectedNote &&
-            <Note note={selectedNote}/>
+            <Note note={selectedNote} onDelete={handleDeleteNote}/>
           }
           {
             !selectedNote &&
@@ -99,24 +99,36 @@ function App() {
   );
 }
 
-function Note({note}){
+function Note({note, onDelete}){
+  const handleDeleteNote = (e) => {
+    e.stopPropagation();
+    onDelete(note.id)
+  } 
+
   return(
     <div className="bg-yellow-100 rounded-2xl p-4">
-      <h1 className="text-lg font-bold mb-3">{note.title}</h1>
-      <p className="max-h-[40vh] overflow-auto mb-3">{note.content}</p>  
-      <h2>{note.created}</h2>          
+      <div>
+        <h1 className="text-lg font-bold mb-3">{note.title}</h1>
+        <p className="max-h-[40vh] overflow-auto mb-3">{note.content}</p>  
+        <h2>{note.created}</h2>          
+      </div> 
+      <div className='flex justify-end'>
+        <MdDeleteOutline className='text-3xl text-red-200 hover:text-red-600' onClick={handleDeleteNote}/>
+      </div>
     </div>
   )
 }
 
 function SmallNote({ note, onDelete, ...rest }) {
+  const handleDeleteNote = (e) => {
+    e.stopPropagation();
+    onDelete(note.id)
+  } 
+
   return (
     <div className="bg-yellow-200 hover:bg-yellow-300 rounded-xl mb-2 p-3 cursor-pointer" {...rest}>
-      <div className="actions text-red-300 flex justify-end text-2xl hover:text-red-600" onClick={(e) => {
-        e.stopPropagation();
-        onDelete(note.id)
-      }}>
-        <MdDeleteOutline/>
+      <div className="flex justify-end" onClick={handleDeleteNote}>
+        <MdDeleteOutline className='text-2xl text-red-300 hover:text-red-600'/>
       </div>
       <div>
         <h1 className="font-bold mb-2">{note.title}</h1>
