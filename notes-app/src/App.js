@@ -1,9 +1,13 @@
 import React, {useState, useEffect} from 'react'
+import {MdDeleteOutline, MdSave} from "react-icons/md";
 import ReactDOM from 'react-dom'
 import {v4 as uuidv4} from 'uuid';
-import {MdDeleteOutline, MdSave} from "react-icons/md";
 import {ToastContainer, toast} from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
+import Modal from './components/Modal';
+import Container from './components/Container';
+import SmallNote from './components/SmallNote';
+import Note from './components/Note';
 
 function App() {
   const [notes, setNotes] = useState(() => {
@@ -110,7 +114,7 @@ function App() {
           }
           {
             !selectedNote &&
-            <div className='bg-yellow-200 rounded-lg p-3'>Start by creating or selecting a new note!</div>
+            <Container className='p-3'>Start by creating or selecting a new note!</Container>
           }
         </div>
         {
@@ -120,7 +124,7 @@ function App() {
             </div>
             <div className='flex justify-center flex-col'>
               {renderedNotes.length > 0 && renderedNotes}
-              {renderedNotes.length === 0 && <div className='bg-red-100 p-4 rounded-lg'>Yo have no notes to show</div>}
+              {renderedNotes.length === 0 && <Container className='bg-red-100 p-4'>Yo have no notes to show</Container>}
             </div>
           </div>
         }
@@ -129,90 +133,6 @@ function App() {
       <ToastContainer/>
     </div>
   );
-}
-
-function Note({note, onDelete, onUpdate}){
-const [updatedContent, setUpdatedContent] = useState("")
-
-  const handleDeleteNote = (e) => {
-    e.stopPropagation();
-    onDelete(note.id)
-  } 
-
-  useEffect(() => {
-    setUpdatedContent(note.content);
-    return () => setUpdatedContent("");
-  }, [note])
-
-  const handleUpdateNote = () => {
-    if(updatedContent === note.content) return;
-    const updatedDate = new Date();
-    const newNote = {
-      ...note,
-      content: updatedContent,
-      createdDate: updatedDate.toLocaleDateString(),
-      createdTime: updatedDate.toLocaleTimeString(),
-    };
-    onUpdate(newNote);
-  }
-
-  return(
-    <div className="bg-yellow-100 rounded-2xl p-4">
-      <div>
-        <h1 className="text-lg font-bold mb-3">{note.title}</h1>
-        <textarea rows="10" className="max-h-[40vh] overflow-auto mb-3 w-full bg-yellow-200 rounded-lg p-2" value={updatedContent} onChange={(e) => {
-          setUpdatedContent(e.target.value)
-        }}></textarea>  
-        <h2>{note.createdDate}</h2>
-        <h3>{note.createdTime}</h3>          
-      </div> 
-      <div className='flex justify-end text-3xl'>
-        <MdSave className='text-sky-400 hover:text-sky-600' onClick={handleUpdateNote}/>
-        <MdDeleteOutline className='text-red-400 hover:text-red-600' onClick={handleDeleteNote}/>
-      </div>
-    </div>
-  )
-}
-
-function SmallNote({ note, onDelete, ...rest }) {
-  const handleDeleteNote = (e) => {
-    e.stopPropagation();
-    onDelete(note.id)
-  } 
-
-  return (
-    <div className="bg-yellow-200 hover:bg-yellow-300 rounded-xl mb-2 p-3 cursor-pointer" {...rest}>
-      <div className="flex justify-end">
-        <MdDeleteOutline className='text-2xl text-red-300 hover:text-red-600' onClick={handleDeleteNote}/>
-      </div>
-      <div>
-        <h1 className="font-bold mb-2">{note.title}</h1>
-        <p className="line-clamp-5">{note.content}</p>
-      </div>
-    </div>
-  );
-}
-
-
-function Modal({children, onClose, actionBar}){
-  useEffect(()=>{
-    document.body.classList.add('overflow-hidden')
-    return () => document.body.classList.remove('overflow-hidden')
-  },[])
-  return ReactDOM.createPortal(
-    <div>
-      <div onClick={onClose} className='fixed inset-0 bg-gray-300 opacity-80 flex'></div>
-        <div className="fixed top-[50%] left-[50%] translate-y-[-50%] translate-x-[-50%] p-10 bg-yellow-300 rounded-lg">
-            <div className='flex flex-col justify-between h-full'>
-                {children}
-                <div>
-                    {actionBar}
-                </div>
-            </div>
-        </div>
-    </div>,
-    document.querySelector('.modal-container')
-  )
 }
 
 export default App;
