@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import ReactDOM from 'react-dom'
 import {v4 as uuidv4} from 'uuid';
-import {MdDeleteOutline} from "react-icons/md";
+import {MdDeleteOutline, MdSave} from "react-icons/md";
 
 function App() {
   const [notes, setNotes] = useState(() => {
@@ -44,12 +44,22 @@ function App() {
       id: uuidv4(),
       title: noteTitle,
       content: noteContent,
-      created: createdDate.toLocaleDateString()
+      createdDate: createdDate.toLocaleDateString(),
+      createdTime: createdDate.toLocaleTimeString()
     };
     setNotes(prev => [...prev, note])
     setNoteTitle("");
     setNoteContent("");
     setIsAddingNote(false);
+  }
+
+  const handleUpdateNote = (updatedNote) => {
+    const updatedNotes = notes.map(note => {
+      if(note.id !== updatedNote.id) return note;
+      return updatedNote;
+    })
+    setNotes(updatedNotes);
+    if(updatedNote.id === selectedNote.id) setSelectedNote(updatedNote);
   }
 
   const renderedNotes = notes.map((note) => <SmallNote note={note} key={note.id} onClick={() => handleSelectedNote(note)} onDelete={handleDeleteNote}/>);
@@ -63,11 +73,11 @@ function App() {
     <div className='text-indigo-700'> 
       <div className='flex flex-col mb-2'>
         <label htmlFor="title" className='font-bold'>Title</label>
-        <input type="text" name='title' className='bg-yellow-100 rounded-lg outline-indigo-400 p-2 font-medium' value={noteTitle} onChange={(e) => setNoteTitle(e.target.value)} placeholder='Add a new title'/>
+        <input type="text" id="title" name='title' className='bg-yellow-100 rounded-lg outline-indigo-400 p-2 font-medium' value={noteTitle} onChange={(e) => setNoteTitle(e.target.value)} placeholder='Add a new title'/>
       </div>
       <div className='flex flex-col'>
         <label htmlFor="content" className='font-bold'>Content</label>
-        <textarea name="content" id="" cols="30" rows="10" className='rounded-lg bg-yellow-100 outline-indigo-400 p-2 font-medium' value={noteContent} onChange={(e) => setNoteContent(e.target.value)} placeholder='Write something!'></textarea>
+        <textarea name="content" id="content" cols="30" rows="10" className='rounded-lg bg-yellow-100 outline-indigo-400 p-2 font-medium' value={noteContent} onChange={(e) => setNoteContent(e.target.value)} placeholder='Write something!'></textarea>
       </div>
     </div>
   </Modal>
@@ -82,7 +92,7 @@ function App() {
         <div className="grow p-4">
           {
             selectedNote &&
-            <Note note={selectedNote} onDelete={handleDeleteNote}/>
+            <Note note={selectedNote} onDelete={handleDeleteNote} onUpdate={handleUpdateNote}/>
           }
           {
             !selectedNote &&
@@ -99,21 +109,36 @@ function App() {
   );
 }
 
-function Note({note, onDelete}){
+function Note({note, onDelete, onUpdate}){
+const [content, setContent] = useState(note.content)
+
   const handleDeleteNote = (e) => {
     e.stopPropagation();
     onDelete(note.id)
   } 
 
+  const handleUpdateNote = () => {
+    const updatedDate = new Date();
+    const newNote = {
+      content,
+      createdDate: updatedDate.toLocaleDateString(),
+      createdTime: updatedDate.toLocaleTimeString(),
+      ...note,
+    };
+    onUpdate(newNote);
+  }
+
   return(
     <div className="bg-yellow-100 rounded-2xl p-4">
       <div>
         <h1 className="text-lg font-bold mb-3">{note.title}</h1>
-        <p className="max-h-[40vh] overflow-auto mb-3">{note.content}</p>  
-        <h2>{note.created}</h2>          
+        <textarea rows="10" className="max-h-[40vh] overflow-auto mb-3 w-full bg-yellow-200 rounded-lg p-2" value={content} onChange={(e) => setContent(e.target.value)}></textarea>  
+        <h2>{note.createdDate}</h2>
+        <h3>{note.createdTime}</h3>          
       </div> 
-      <div className='flex justify-end'>
-        <MdDeleteOutline className='text-3xl text-red-200 hover:text-red-600' onClick={handleDeleteNote}/>
+      <div className='flex justify-end text-3xl'>
+        <MdSave className='text-sky-400 hover:text-sky-600' onClick={handleUpdateNote}/>
+        <MdDeleteOutline className='text-red-400 hover:text-red-600' onClick={handleDeleteNote}/>
       </div>
     </div>
   )
