@@ -2,6 +2,8 @@ import React, {useState, useEffect} from 'react'
 import ReactDOM from 'react-dom'
 import {v4 as uuidv4} from 'uuid';
 import {MdDeleteOutline, MdSave} from "react-icons/md";
+import {ToastContainer, toast} from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const [notes, setNotes] = useState(() => {
@@ -59,7 +61,8 @@ function App() {
       return updatedNote;
     })
     setNotes(updatedNotes);
-    if(updatedNote.id === selectedNote.id) setSelectedNote(updatedNote);
+    setSelectedNote(updatedNote);
+    toast("Note updated")
   }
 
   const renderedNotes = notes.map((note) => <SmallNote note={note} key={note.id} onClick={() => handleSelectedNote(note)} onDelete={handleDeleteNote}/>);
@@ -105,25 +108,32 @@ function App() {
         }
       </div>
       <span className="w-fit p-4 absolute bottom-0 right-0 m-2 rounded-full bg-yellow-200 hover:bg-yellow-300 cursor-pointer" onClick={handleAddNote}>Add note</span>
+      <ToastContainer/>
     </div>
   );
 }
 
 function Note({note, onDelete, onUpdate}){
-const [content, setContent] = useState(note.content)
+const [updatedContent, setUpdatedContent] = useState("")
 
   const handleDeleteNote = (e) => {
     e.stopPropagation();
     onDelete(note.id)
   } 
 
+  useEffect(() => {
+    setUpdatedContent(note.content);
+    return () => setUpdatedContent("");
+  }, [note])
+
   const handleUpdateNote = () => {
+    if(updatedContent === note.content) return;
     const updatedDate = new Date();
     const newNote = {
-      content,
+      ...note,
+      content: updatedContent,
       createdDate: updatedDate.toLocaleDateString(),
       createdTime: updatedDate.toLocaleTimeString(),
-      ...note,
     };
     onUpdate(newNote);
   }
@@ -132,7 +142,9 @@ const [content, setContent] = useState(note.content)
     <div className="bg-yellow-100 rounded-2xl p-4">
       <div>
         <h1 className="text-lg font-bold mb-3">{note.title}</h1>
-        <textarea rows="10" className="max-h-[40vh] overflow-auto mb-3 w-full bg-yellow-200 rounded-lg p-2" value={content} onChange={(e) => setContent(e.target.value)}></textarea>  
+        <textarea rows="10" className="max-h-[40vh] overflow-auto mb-3 w-full bg-yellow-200 rounded-lg p-2" value={updatedContent} onChange={(e) => {
+          setUpdatedContent(e.target.value)
+        }}></textarea>  
         <h2>{note.createdDate}</h2>
         <h3>{note.createdTime}</h3>          
       </div> 
@@ -152,8 +164,8 @@ function SmallNote({ note, onDelete, ...rest }) {
 
   return (
     <div className="bg-yellow-200 hover:bg-yellow-300 rounded-xl mb-2 p-3 cursor-pointer" {...rest}>
-      <div className="flex justify-end" onClick={handleDeleteNote}>
-        <MdDeleteOutline className='text-2xl text-red-300 hover:text-red-600'/>
+      <div className="flex justify-end">
+        <MdDeleteOutline className='text-2xl text-red-300 hover:text-red-600' onClick={handleDeleteNote}/>
       </div>
       <div>
         <h1 className="font-bold mb-2">{note.title}</h1>
