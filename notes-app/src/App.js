@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import ReactDOM from 'react-dom'
 import {v4 as uuidv4} from 'uuid';
+import {MdDeleteOutline} from "react-icons/md";
 
 function App() {
   const [notes, setNotes] = useState(() => {
@@ -31,6 +32,12 @@ function App() {
     setIsAddingNote(false);
   }
 
+  const handleDeleteNote = (id) => {
+    const remainingNotes = notes.filter(note => note.id !== id);
+    if(id === selectedNote?.id) setSelectedNote(null);
+    setNotes(remainingNotes);
+  }
+
   const handleCreateNote = () => {
     const createdDate = new Date();
     const note = {
@@ -45,7 +52,7 @@ function App() {
     setIsAddingNote(false);
   }
 
-  const renderedNotes = notes.map((note) => <SmallNote note={note} key={note.id} onClick={() => handleSelectedNote(note)}/>);
+  const renderedNotes = notes.map((note) => <SmallNote note={note} key={note.id} onClick={() => handleSelectedNote(note)} onDelete={handleDeleteNote}/>);
   
   const actionBar = <div className='text-indigo-700 font-bold flex flex-row justify-between mt-5'>
     <button className='bg-red-200 p-3 rounded-xl hover:bg-red-300' onClick={handleCancelNote}>Cancel</button>
@@ -84,7 +91,7 @@ function App() {
         </div>
         {
           renderedNotes.length > 0 &&
-          <div className="max-w-sm p-4 overflow-auto">{renderedNotes}</div>
+          <div className="min-w-sm max-w-sm p-4 overflow-auto">{renderedNotes}</div>
         }
       </div>
       <span className="w-fit p-4 absolute bottom-0 right-0 m-2 rounded-full bg-yellow-200 hover:bg-yellow-300 cursor-pointer" onClick={handleAddNote}>Add note</span>
@@ -102,14 +109,23 @@ function Note({note}){
   )
 }
 
-function SmallNote({ note, ...rest }) {
+function SmallNote({ note, onDelete, ...rest }) {
   return (
     <div className="bg-yellow-200 hover:bg-yellow-300 rounded-xl mb-2 p-3 cursor-pointer" {...rest}>
-      <h1 className="font-bold mb-2">{note.title}</h1>
-      <p className="line-clamp-5">{note.content}</p>
+      <div className="actions text-red-300 flex justify-end text-2xl hover:text-red-600" onClick={(e) => {
+        e.stopPropagation();
+        onDelete(note.id)
+      }}>
+        <MdDeleteOutline/>
+      </div>
+      <div>
+        <h1 className="font-bold mb-2">{note.title}</h1>
+        <p className="line-clamp-5">{note.content}</p>
+      </div>
     </div>
   );
 }
+
 
 function Modal({children, onClose, actionBar}){
   useEffect(()=>{
