@@ -3,11 +3,19 @@ import ReactDOM from 'react-dom'
 import {v4 as uuidv4} from 'uuid';
 
 function App() {
-  const [notes, setNotes] = useState([]);
+  const [notes, setNotes] = useState(() => {
+    const savedData = localStorage.getItem('notes');
+    if(savedData) return JSON.parse(savedData);
+    return [];
+  });
   const [selectedNote, setSelectedNote] = useState(null);
   const [isAddingNote, setIsAddingNote] = useState(false);
   const [noteTitle, setNoteTitle] = useState("");
   const [noteContent, setNoteContent] = useState("");
+
+  useEffect(() => {
+    localStorage.setItem('notes', JSON.stringify(notes)); // Update notes on the local storage
+  }, [notes])
 
   const handleSelectedNote = (note) => {
     setSelectedNote(note);
@@ -29,7 +37,7 @@ function App() {
       id: uuidv4(),
       title: noteTitle,
       content: noteContent,
-      created: createdDate
+      created: createdDate.toLocaleDateString()
     };
     setNotes(prev => [...prev, note])
     setNoteTitle("");
@@ -71,7 +79,7 @@ function App() {
           }
           {
             !selectedNote &&
-            <div className='bg-yellow-200 rounded-lg p-3'>Start by creating and selecting a new note!</div>
+            <div className='bg-yellow-200 rounded-lg p-3'>Start by creating or selecting a new note!</div>
           }
         </div>
         {
@@ -89,7 +97,7 @@ function Note({note}){
     <div className="bg-yellow-100 rounded-2xl p-4">
       <h1 className="text-lg font-bold mb-3">{note.title}</h1>
       <p className="max-h-[40vh] overflow-auto mb-3">{note.content}</p>  
-      <h2>{note.created.toDateString()}</h2>          
+      <h2>{note.created}</h2>          
     </div>
   )
 }
