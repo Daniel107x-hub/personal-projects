@@ -1,13 +1,12 @@
 import React, {useState, useEffect} from 'react'
-import {MdDeleteOutline, MdSave} from "react-icons/md";
-import ReactDOM from 'react-dom'
-import {v4 as uuidv4} from 'uuid';
-import {ToastContainer, toast} from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css';
 import Modal from './components/Modal';
 import Container from './components/Container';
 import SmallNote from './components/SmallNote';
 import Note from './components/Note';
+
+import {ToastContainer, toast} from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
+import {v4 as uuidv4} from 'uuid';
 
 function App() {
   const [notes, setNotes] = useState(() => {
