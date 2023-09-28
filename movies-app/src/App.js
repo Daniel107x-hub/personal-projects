@@ -1,13 +1,29 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { discoverMovies } from "./api/movies";
+
 function App() {
+  const [movies, setMovies] = useState([]);
+
   useEffect(()=>{
-    console.log(process.env.REACT_APP_TMDB_API_KEY);
-  }, [])
+    discoverMovies()
+    .then(response => {
+      setMovies(response.data.results);
+    })
+  }, []);
+
+  const renderedMovies = movies.map(movie => <MovieTile image={movie.})
+
   return (
     <div className="App">
-      Hello
+      {
+        console.log(movies)
+      }
     </div>
   );
+}
+
+function MovieTile({image}){
+  return <img src={image} alt="" />
 }
 
 export default App;
