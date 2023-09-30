@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { discoverMovies } from "./api/movies";
 import { getImage } from "./api/images";
+import {AiOutlineHeart, AiFillHeart} from 'react-icons/ai';
+import { IconContext } from "react-icons";
+
 function App() {
   const [movies, setMovies] = useState([]);
 
@@ -41,8 +44,11 @@ function Card({children}){
 function MovieTile({movie}){
   const {poster_path, title, release_date, vote_average} = movie;
   return <div className="flex flex-col">
-    <section className="rounded-lg overflow-hidden">
+    <section className="rounded-lg overflow-hidden relative">
       <img src={getImage(poster_path)} alt=""/>
+      <span className="absolute bg-zinc-100 bottom-2 right-2 rounded-full w-8 h-8 text-blue-400 flex items-center justify-center fill-red-800">
+        <AiFillHeart/>
+      </span>
     </section>
     <section className="flex flex-col font-medium flex space-y-1 mt-2 px-1">
       <span className="title font-semibold">{title}</span>
