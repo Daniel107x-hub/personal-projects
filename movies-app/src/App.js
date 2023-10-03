@@ -3,10 +3,12 @@ import { discoverMovies } from "./api/movies";
 import { getImage } from "./api/images";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { BiSolidStar, BiSolidStarHalf, BiStar } from 'react-icons/bi'
+import { GiHamburgerMenu } from 'react-icons/gi';
 
 function App() {
   const [movies, setMovies] = useState([]);
   const [favorites, setFavorites] = useState([]);
+  const [showSidebar, setShowSidebar] = useState(false);
 
   useEffect(() => {
     discoverMovies().then((response) => {
@@ -22,6 +24,10 @@ function App() {
     setFavorites(updatedFavorites);
   }
 
+  const handleSidebar = () => {
+    setShowSidebar(prev => !prev);
+  }
+
   const renderedMovies = movies.map((movie) => (
     <Card key={movie.id}>
       <MovieTile movie={movie} onLiked={handleLiked}/>
@@ -31,8 +37,11 @@ function App() {
   return (
     <div className="bg-gray-800 font-jakarta h-screen flex flex-col justify-between text-zinc-200 overflow-y-scroll p-2">
       <section className="h-10 font-bold">Movies App</section>
-      <section className="flex-1 flex flex-col">
-        <h1 className="mt-2 mb-6">Suggestions</h1>
+      <section className="flex-1 flex flex-col relative items-center">
+        <h1 className="mt-2 mb-6 text-xl">Suggestions</h1>
+        <span className="bg-zinc-100 rounded-md text-red-500 absolute p-2 right-2 hover:bg-zinc-200 cursor-pointer" onClick={handleSidebar}>
+          <GiHamburgerMenu/>
+        </span>
         <div className="grid grid-cols-6 gap-5">
           {renderedMovies}
         </div>;
@@ -97,5 +106,6 @@ const getScoreStars = (votes) => {
   if(hasDecimalPart)  scoreIcons.push(<BiSolidStarHalf key={intPart}/>);
   return scoreIcons;
 }
+
 
 export default App;
