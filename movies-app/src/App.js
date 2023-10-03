@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { discoverMovies } from "./api/movies";
 import { getImage } from "./api/images";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
+import { BiSolidStar, BiSolidStarHalf, BiStar } from 'react-icons/bi'
 
 function App() {
   const [movies, setMovies] = useState([]);
@@ -60,6 +61,7 @@ function MovieTile({ movie, onLiked }) {
   };
 
   const { poster_path, title, release_date, vote_average } = movie;
+  const scoreIcons = getScoreStars(vote_average);
 
   let icon = <AiOutlineHeart />;
   if (isFavorite || isHovered) icon = <AiFillHeart />;
@@ -80,10 +82,20 @@ function MovieTile({ movie, onLiked }) {
       <section className="flex flex-col font-medium flex space-y-1 mt-2 px-1">
         <span className="title font-semibold">{title}</span>
         <span className="release-date text-sm">{release_date}</span>
-        <span className="vote text-xs">{vote_average}</span>
+        <span className="vote text-xs flex flex-row">{scoreIcons}</span>
       </section>
     </div>
   );
+}
+
+const getScoreStars = (votes) => {
+  const score = votes / 2;
+  const intPart = Math.floor(score);
+  const hasDecimalPart = score * 10 % 10 > 0;
+  let scoreIcons = []
+  for(let index = 0 ; index < intPart ; index++) scoreIcons.push(<BiSolidStar key={index}/>)
+  if(hasDecimalPart)  scoreIcons.push(<BiSolidStarHalf key={intPart}/>);
+  return scoreIcons;
 }
 
 export default App;
