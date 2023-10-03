@@ -6,12 +6,7 @@
 .circle-icon:hover .icon{
   transition-property: transform;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 300ms;
+  transition-duration: 200ms;
   transition-delay: 100ms;
   transform: scale(1.2);
 }
-
-.icon{
-  transform: scale(1);
-}
-
