@@ -46,7 +46,7 @@ function App() {
       <section className="flex-1 flex flex-col relative items-center">
         <h1 className="mt-2 mb-6 text-xl">Suggestions</h1>
         <span 
-          className={`bg-zinc-100 rounded-md text-red-500 p-2 hover:bg-zinc-200 cursor-pointer transition-all fixed z-10 ${showSidebar ? 'right-[31%]' : 'right-[2%]'} `}
+          className={`bg-zinc-100 rounded-md text-red-500 p-2 hover:bg-zinc-200 cursor-pointer transition-all fixed z-10 ${showSidebar ? 'hidden' : 'right-[2%]'} `}
           onClick={handleSidebar}>
           <GiHamburgerMenu/>
         </span>
@@ -54,7 +54,7 @@ function App() {
           {renderedMovies}
         </div>
         <Sidebar isVisible={showSidebar} onClose={handleSidebar}>
-          <h1>Your favorites</h1>
+          <h1 className="font-bold">Your favorites</h1>
           <section className="p-10 grid grid-cols-1 gap-3">
             {
               renderedFavorites
