@@ -2,3 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans&display=swap');
+
+::-webkit-scrollbar{
+    width: 10px;
+}
+
+::-webkit-scrollbar-track{
+    background-color: rgba(0, 0, 0, 0);
+}
+
+::-webkit-scrollbar-thumb{
+    background-color: rgba(50, 50, 50, 0.8);
+    border-radius: 20px;
+}
