@@ -1,17 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { BiSolidStar, BiSolidStarHalf } from "react-icons/bi";
 import { getImage } from "../../api/images";
 import './MovieTile.css'
 
-function MovieTile({ movie, onLiked, isFav }) {
-    const [isFavorite, setIsFavorite] = useState(isFav);
+function MovieTile({ movie, onLiked }) {
+    const [isFavorite, setIsFavorite] = useState(movie.isFavorite || false);
     const [isHovered, setIsHovered] = useState(false);
+
+    useEffect(()=>{
+        setIsFavorite(movie.isFavorite || false)
+    }, [movie])
 
     const handleFavoriteClick = (e) => {
         e.stopPropagation();
         setIsFavorite((prev) => !prev);
-        onLiked(movie);
+        onLiked(movie.id);
     };
 
     const { poster_path, title, release_date, vote_average } = movie;

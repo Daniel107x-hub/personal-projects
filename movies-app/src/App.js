@@ -7,7 +7,6 @@ import { discoverMovies } from "./api/movies";
 
 function App() {
   const [movies, setMovies] = useState([]);
-  const [favorites, setFavorites] = useState([]);
   const [showSidebar, setShowSidebar] = useState(false);
 
   useEffect(() => {
@@ -16,29 +15,19 @@ function App() {
     });
   }, []);
 
-  const handleLiked = (movie) => {
-    const isFavorite = favorites.includes(movie);
-    let updatedFavorites = [...favorites];
-    if(isFavorite) updatedFavorites = updatedFavorites.filter(fav => fav.id !== movie.id);
-    else updatedFavorites.push(movie);
-    setFavorites(updatedFavorites);
+  const handleLiked = (id) => {
+    const movie = movies.find(movie => movie.id === id);
+    const isFavorite = movie.isFavorite || false;
+    const updatedMovies = movies.map((movie) => {
+      if(movie.id !== id) return movie;
+      return {...movie, isFavorite: !isFavorite};
+    })
+    setMovies(updatedMovies);
   }
 
   const handleSidebar = () => {
     setShowSidebar(prev => !prev);
   }
-
-  const renderedMovies = movies.map((movie) => (
-    <Card key={movie.id}>
-      <MovieTile movie={movie} onLiked={handleLiked} isFav={() => favorites.includes(movie)}/>
-    </Card>
-  ));
-
-  const renderedFavorites = favorites.map((movie) => (
-    <Card key={movie.id}>
-      <MovieTile movie={movie} onLiked={handleLiked} isFav={() => favorites.includes(movie)}/>
-    </Card>
-  ));
 
   return (
     <div className={`bg-gray-800 font-jakarta flex flex-col justify-between text-zinc-200 p-2 h-screen ${showSidebar ? 'overflow-hidden' : 'overflow-y-scroll'}`}>
@@ -50,21 +39,39 @@ function App() {
           onClick={handleSidebar}>
           <GiHamburgerMenu/>
         </span>
-        <div className="grid grid-cols-6 gap-5">
-          {renderedMovies}
-        </div>
+        <Gallery>
+          {
+            movies
+            .map((movie) => getMovieCard(movie, handleLiked))
+          }
+        </Gallery>
         <Sidebar isVisible={showSidebar} onClose={handleSidebar}>
           <h1 className="font-bold">Your favorites</h1>
-          <section className="p-10 grid grid-cols-1 gap-3">
-            {
-              renderedFavorites
-            }
-          </section>
+          <Gallery>
+          {
+            movies
+            .filter((movie) => movie.isFavorite)
+            .map((movie) => getMovieCard(movie, handleLiked))
+          }
+          </Gallery>
         </Sidebar>
       </section>
     </div>
   );
 }
 
+function Gallery({children}){
+  return <section className="gallery">
+    {
+      children
+    }
+  </section>
+}
+
+const getMovieCard = (movie, onLiked) => {
+  return <Card key={movie.id}>
+  <MovieTile movie={movie} onLiked={onLiked}/>
+</Card>
+}
 
 export default App;
