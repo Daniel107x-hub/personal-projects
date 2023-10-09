@@ -8,4 +8,12 @@ const discoverMovies = () => {
     });
 }
 
-export {discoverMovies}
+const getMovieById = async (id) => {
+    return await axios.get(`https://api.themoviedb.org/3/movie/${id}`,{
+        params: {
+            api_key: process.env.REACT_APP_TMDB_API_KEY
+        }
+    });
+}
+
+export {discoverMovies, getMovieById}
