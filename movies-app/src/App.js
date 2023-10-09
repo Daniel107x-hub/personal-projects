@@ -7,6 +7,7 @@ import { discoverMovies, getMovieById } from "./api/movies";
 
 function App() {
   const [movies, setMovies] = useState([]);
+  const [favorites, setFavorites] = useState([]);
   const [favoriteIds, setFavoriteIds] = useState([]);
   const [showSidebar, setShowSidebar] = useState(false);
 
@@ -15,6 +16,11 @@ function App() {
       setMovies(response.data.results);
     });
   }, []);
+
+  useEffect(() => {
+    const favoriteMovies = favoriteIds.map(async id => await getMovieById(id))
+    setFavoriteIds(favoriteMovies);
+  }, [favoriteIds])
 
   const handleLiked = (id) => {
     const isFavorite = favoriteIds.includes(id);
