@@ -4,13 +4,13 @@ import { BiSolidStar, BiSolidStarHalf } from "react-icons/bi";
 import { getImage } from "../../api/images";
 import './MovieTile.css'
 
-function MovieTile({ movie, onLiked }) {
-    const [isFavorite, setIsFavorite] = useState(movie.isFavorite || false);
+function MovieTile({ movie, onLiked, isFav }) {
+    const [isFavorite, setIsFavorite] = useState(isFav || false);
     const [isHovered, setIsHovered] = useState(false);
 
     useEffect(()=>{
-        setIsFavorite(movie.isFavorite || false)
-    }, [movie])
+        setIsFavorite(isFav || false)
+    }, [isFav])
 
     const handleFavoriteClick = (e) => {
         e.stopPropagation();

@@ -4,12 +4,14 @@ import MovieTile from './components/movies/MovieTile';
 import Sidebar from "./components/ui/Sidebar";
 import { GiHamburgerMenu } from 'react-icons/gi';
 import { discoverMovies, getMovieById } from "./api/movies";
+import loading from './loading.gif';
 
 function App() {
   const [movies, setMovies] = useState([]);
   const [favorites, setFavorites] = useState([]);
   const [favoriteIds, setFavoriteIds] = useState([]);
   const [showSidebar, setShowSidebar] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     discoverMovies().then((response) => {
@@ -18,8 +20,22 @@ function App() {
   }, []);
 
   useEffect(() => {
-    const favoriteMovies = favoriteIds.map(async id => await getMovieById(id))
-    setFavoriteIds(favoriteMovies);
+    const fetchMovies = async () => {
+      if(favoriteIds.length > 0){
+        setIsLoading(true);
+        try {
+          const requests = favoriteIds.map(id => getMovieById(id));
+          const responses = await Promise.all(requests);
+          const data = responses.map(response => response.data);
+          setFavorites(data);
+        } catch (error) {
+          console.error(error);
+        } finally {
+          // setIsLoading(false);
+        }
+      }
+    }
+    fetchMovies();
   }, [favoriteIds])
 
   const handleLiked = (id) => {
@@ -28,13 +44,6 @@ function App() {
     if(isFavorite) updatedFavorites = updatedFavorites.filter(favId => favId !== id);
     else updatedFavorites.push(id);
     setFavoriteIds(updatedFavorites);
-    // const movie = movies.find(movie => movie.id === id);
-    // const isFavorite = movie.isFavorite || false;
-    // const updatedMovies = movies.map((movie) => {
-    //   if(movie.id !== id) return movie;
-    //   return {...movie, isFavorite: !isFavorite};
-    // })
-    // setMovies(updatedMovies);
   }
 
   const handleSidebar = () => {
@@ -54,17 +63,18 @@ function App() {
         <Gallery>
           {
             movies
-            .map((movie) => getMovieCard(movie, handleLiked))
+            .map((movie) => getMovieCard(movie, handleLiked, favoriteIds.includes(movie.id)))
           }
         </Gallery>
         <Sidebar isVisible={showSidebar} onClose={handleSidebar}>
           <h1 className="font-bold">Your favorites</h1>
           <Gallery>
-          {
-            // movies
-            // .filter((movie) => movie.isFavorite)
-            // .map((movie) => getMovieCard(movie, handleLiked))
-          }
+            {
+              favoriteIds.length === 0 && <h1>You have no favorites</h1>
+            }
+            {
+              favoriteIds.length > 0 && favorites.map((movie) => getMovieCard(movie, handleLiked, true))
+            }
           </Gallery>
         </Sidebar>
       </section>
@@ -73,16 +83,16 @@ function App() {
 }
 
 function Gallery({children}){
-  return <section className="gallery">
+  return <section className="gallery flex items-center justify-center content-center">
     {
       children
     }
   </section>
 }
 
-const getMovieCard = (movie, onLiked) => {
+const getMovieCard = (movie, onLiked, isFavorite) => {
   return <Card key={movie.id}>
-  <MovieTile movie={movie} onLiked={onLiked}/>
+  <MovieTile movie={movie} onLiked={onLiked} isFav={isFavorite}/>
 </Card>
 }
 
