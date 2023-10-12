@@ -31,7 +31,7 @@ function App() {
         } catch (error) {
           console.error(error);
         } finally {
-          // setIsLoading(false);
+          setIsLoading(false);
         }
       }
     };
@@ -74,12 +74,16 @@ function App() {
           )}
         </Gallery>
         <Sidebar isVisible={showSidebar} onClose={handleSidebar}>
-          <h1 className="font-bold">Your favorites</h1>
-          <Gallery>
-            {favoriteIds.length === 0 && <h1>You have no favorites</h1>}
-            {favoriteIds.length > 0 &&
-              favorites.map((movie) => getMovieCard(movie, handleLiked, true))}
-          </Gallery>
+          <h1 className="font-bold mb-3">Your favorites</h1>
+          {favoriteIds.length === 0 && <h1>You have no favorites</h1>}
+          {favoriteIds.length > 0 && isLoading && (
+            <img src={loading} alt="Loading gif" className="w-20" />
+          )}
+          {favoriteIds.length > 0 && !isLoading && (
+            <Gallery>
+              {favorites.map((movie) => getMovieCard(movie, handleLiked, true))}
+            </Gallery>
+          )}
         </Sidebar>
       </section>
     </div>
