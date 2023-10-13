@@ -6,7 +6,7 @@ function Sidebar({ children, isVisible, onClose }) {
   return (
     <>
       <div
-        className={`rounded-l-xl bg-gray-700 w-[30%] h-screen top-0 z-10 fixed transition-all overflow-y-auto flex flex-col items-center text-zinc-200 p-2 ${
+        className={`rounded-l-xl bg-gray-800 w-[30%] h-screen top-0 z-10 fixed transition-all overflow-y-auto flex flex-col items-center text-zinc-200 p-2 ${
           isVisible ? "right-0" : "-right-1/3"
         }`}
       >

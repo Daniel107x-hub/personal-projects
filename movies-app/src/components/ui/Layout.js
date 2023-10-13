@@ -44,7 +44,7 @@ function Layout() {
   return (
     <div
       className={`bg-gray-800 font-jakarta flex flex-col justify-between text-zinc-200 p-2 h-screen ${
-        showSidebar ? "overflow-hidden" : "overflow-y-scroll"
+        showSidebar ? "overflow-y-hidden" : "overflow-y-auto"
       }`}
     >
       <section className="h-10 font-bold flex">
@@ -53,13 +53,16 @@ function Layout() {
         </Link>
       </section>
       <span
-        className={`bg-zinc-100 rounded-md text-red-500 p-2 hover:bg-zinc-200 cursor-pointer transition-all fixed z-10 ${
-          showSidebar ? "hidden" : "right-[2%]"
+        className={`bg-zinc-100 rounded-md text-red-500 p-2 hover:bg-zinc-200 cursor-pointer fixed z-10 top-5 ${
+          showSidebar ? "hidden" : "right-[1%]"
         } `}
         onClick={handleSidebar}
       >
         <GiHamburgerMenu />
       </span>
+      <section className="flex-1 flex flex-col items-center">
+        <Outlet />
+      </section>
       <Sidebar isVisible={showSidebar} onClose={handleSidebar}>
         <h1 className="font-bold mb-3">Your favorites</h1>
         {favoriteIds.length === 0 && <h1>You have no favorites</h1>}
@@ -68,17 +71,17 @@ function Layout() {
         )}
         {favoriteIds.length > 0 && !isLoading && (
           <Gallery>
-            {favorites.map((movie) => (
-              <Link to={`movie/${movie.id}`} key={movie.id}>
-                <MovieTile movie={movie}/>
-              </Link>
-            ))}
+            {favorites.map((movie) => {
+              const {id, title, poster_path, vote_average, release_date} = movie;
+              return (
+                <Link to={`movie/${movie.id}`} key={movie.id}>
+                  <MovieTile id={id} title={title} poster={poster_path} rating={vote_average} date={release_date}/>
+                </Link>
+              )
+            })}
           </Gallery>
         )}
       </Sidebar>
-      <section className="flex-1 flex flex-col relative items-center">
-        <Outlet />
-      </section>
     </div>
   );
 }

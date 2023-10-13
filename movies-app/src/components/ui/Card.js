@@ -1,6 +1,6 @@
 function Card({ children, className }) {
     return (
-        <div className={`bg-red-700 p-2 rounded-lg hover:bg-red-800 cursor-pointer ${className}`}>
+        <div className={`bg-neutral-700 p-2 rounded-lg hover:bg-neutral-600 cursor-pointer ${className}`}>
         {children}
         </div>
     );
