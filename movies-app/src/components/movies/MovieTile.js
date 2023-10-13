@@ -27,7 +27,7 @@ function MovieTile({ movie, onLiked, isFav }) {
   if (isFavorite || isHovered) icon = <AiFillHeart />;
 
   return (
-    <Link to={`movie/${movie.id}`} className="flex flex-col">
+    <div className="flex flex-col">
       <section className="rounded-lg overflow-hidden relative">
         <img src={getImage(poster_path)} alt="" />
         <span
@@ -46,7 +46,7 @@ function MovieTile({ movie, onLiked, isFav }) {
         <span className="release-date text-sm">{release_date}</span>
         <span className="vote text-xs flex flex-row">{scoreIcons}</span>
       </section>
-    </Link>
+    </div>
   );
 }
 

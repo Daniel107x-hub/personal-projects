@@ -18,7 +18,6 @@ function Layout() {
     const fetchMovies = async () => {
       if (favoriteIds.length > 0) {
         setIsLoading(true);
-        console.log(favoriteIds);
         try {
           const requests = favoriteIds.map((id) => {
             const params = { movieId: id };
@@ -26,7 +25,6 @@ function Layout() {
           });
           const responses = await Promise.all(requests);
           const data = responses.map((response) => response.movie);
-          console.log(data);
           setFavorites(data);
         } catch (error) {
           console.error(error);

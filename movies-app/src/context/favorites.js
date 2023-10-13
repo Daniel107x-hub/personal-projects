@@ -14,11 +14,16 @@ function FavoritesProvider({ children }) {
     setFavoriteIds(updatedFavorites);
   };
 
+  const isFavorite = (id) => {
+    return favoriteIds.includes(id);
+  };
+
   return (
     <FavoritesContext.Provider
       value={{
         favoriteIds,
         handleLiked,
+        isFavorite,
       }}
     >
       {children}
