@@ -4,6 +4,7 @@ import { BiSolidStar, BiSolidStarHalf } from "react-icons/bi";
 import { getImage } from "../../api/images";
 import "./MovieTile.css";
 import FavoritesContext from "../../context/favorites";
+import Card from "../ui/Card";
 
 function MovieTile({ movie }) {
   const {handleLiked, isFavorite} = useContext(FavoritesContext);
@@ -27,7 +28,7 @@ function MovieTile({ movie }) {
   if (isLiked || isHovered) icon = <AiFillHeart />;
 
   return (
-    <div className="flex flex-col">
+    <Card className="flex flex-col">
       <section className="rounded-lg overflow-hidden relative">
         <img src={getImage(poster_path)} alt="" />
         <span
@@ -46,7 +47,7 @@ function MovieTile({ movie }) {
         <span className="release-date text-sm">{release_date}</span>
         <span className="vote text-xs flex flex-row">{scoreIcons}</span>
       </section>
-    </div>
+    </Card>
   );
 }
 

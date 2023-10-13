@@ -1,12 +1,10 @@
-import React, { useContext } from "react";
-import { getMovieCard } from "../utils/movieUtils";
+import React from "react";
 import Gallery from "../components/ui/Gallery";
-import FavoritesContext from "../context/favorites";
 import { useLoaderData } from "react-router-dom";
 import { Link } from "react-router-dom";
+import MovieTile from "../components/movies/MovieTile";
 
 function Suggestions() {
-  const { favoriteIds, handleLiked } = useContext(FavoritesContext);
   const { movies } = useLoaderData();
   return (
     <>
@@ -14,7 +12,7 @@ function Suggestions() {
       <Gallery>
         {movies.map((movie) => (
           <Link to={`movie/${movie.id}`} key={movie.id}>
-            {getMovieCard(movie)}
+            <MovieTile movie={movie}/>
           </Link>
         ))}
       </Gallery>

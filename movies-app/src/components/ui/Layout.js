@@ -4,13 +4,13 @@ import { GiHamburgerMenu } from "react-icons/gi";
 import Sidebar from "./Sidebar";
 import Gallery from "./Gallery";
 import { getMovieById } from "../../api/movies";
-import { getMovieCard } from "../../utils/movieUtils";
 import loading from "../../loading.gif";
 import FavoritesContext from "../../context/favorites";
 import { Link } from "react-router-dom";
+import MovieTile from "../movies/MovieTile";
 
 function Layout() {
-  const { favoriteIds, handleLiked } = useContext(FavoritesContext);
+  const { favoriteIds } = useContext(FavoritesContext);
   const [favorites, setFavorites] = useState([]);
   const [showSidebar, setShowSidebar] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -70,7 +70,7 @@ function Layout() {
           <Gallery>
             {favorites.map((movie) => (
               <Link to={`movie/${movie.id}`} key={movie.id}>
-                {getMovieCard(movie)}
+                <MovieTile movie={movie}/>
               </Link>
             ))}
           </Gallery>
