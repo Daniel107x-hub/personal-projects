@@ -70,7 +70,7 @@ function Layout() {
           <Gallery>
             {favorites.map((movie) => (
               <Link to={`movie/${movie.id}`} key={movie.id}>
-                {getMovieCard(movie, handleLiked, true)}
+                {getMovieCard(movie)}
               </Link>
             ))}
           </Gallery>

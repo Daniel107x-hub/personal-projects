@@ -10,7 +10,7 @@ function Movie() {
     <>
       <h1 className="mt-2 mb-6 text-xl">{movie.title}</h1>
       <div className="w-1/6">
-        {getMovieCard(movie, handleLiked, isFavorite(movie.id))}
+        {getMovieCard(movie)}
       </div>
     </>
   );

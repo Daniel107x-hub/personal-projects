@@ -14,7 +14,7 @@ function Suggestions() {
       <Gallery>
         {movies.map((movie) => (
           <Link to={`movie/${movie.id}`} key={movie.id}>
-            {getMovieCard(movie, handleLiked, favoriteIds.includes(movie.id))}
+            {getMovieCard(movie)}
           </Link>
         ))}
       </Gallery>
