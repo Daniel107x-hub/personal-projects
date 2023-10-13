@@ -7,6 +7,7 @@ import { getMovieById } from "../../api/movies";
 import { getMovieCard } from "../../utils/movieUtils";
 import loading from "../../loading.gif";
 import FavoritesContext from "../../context/favorites";
+import { Link } from "react-router-dom";
 
 function Layout() {
   const { favoriteIds, handleLiked } = useContext(FavoritesContext);
@@ -47,7 +48,9 @@ function Layout() {
       }`}
     >
       <section className="h-10 font-bold flex">
-        <h1>Movies App</h1>
+        <Link to={"/"}>
+          <h1>Movies App</h1>
+        </Link>
       </section>
       <span
         className={`bg-zinc-100 rounded-md text-red-500 p-2 hover:bg-zinc-200 cursor-pointer transition-all fixed z-10 ${
@@ -65,7 +68,11 @@ function Layout() {
         )}
         {favoriteIds.length > 0 && !isLoading && (
           <Gallery>
-            {favorites.map((movie) => getMovieCard(movie, handleLiked, true))}
+            {favorites.map((movie) => (
+              <Link to={`movie/${movie.id}`} key={movie.id}>
+                {getMovieCard(movie, handleLiked, true)}
+              </Link>
+            ))}
           </Gallery>
         )}
       </Sidebar>
