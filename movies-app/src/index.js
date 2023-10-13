@@ -18,6 +18,7 @@ const router = createBrowserRouter([
       {
         path: "",
         element: <Suggestions />,
+        loader: discoverMovies,
       },
       {
         path: "movie/:movieId",

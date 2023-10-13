@@ -1,17 +1,12 @@
 import React, { useState, useEffect, useContext } from "react";
 import { getMovieCard } from "../utils/movieUtils";
-import { discoverMovies } from "../api/movies";
 import Gallery from "../components/ui/Gallery";
 import FavoritesContext from "../context/favorites";
+import { useLoaderData } from "react-router-dom";
 
 function Suggestions() {
   const { favoriteIds, handleLiked } = useContext(FavoritesContext);
-  const [movies, setMovies] = useState([]);
-  useEffect(() => {
-    discoverMovies().then((response) => {
-      setMovies(response.data.results);
-    });
-  }, []);
+  const { movies } = useLoaderData();
   return (
     <>
       <h1 className="mt-2 mb-6 text-xl">Suggestions</h1>

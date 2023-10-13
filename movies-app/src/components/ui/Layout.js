@@ -8,7 +8,7 @@ import { getMovieCard } from "../../utils/movieUtils";
 import loading from "../../loading.gif";
 import FavoritesContext from "../../context/favorites";
 
-function Layout({ children }) {
+function Layout() {
   const { favoriteIds, handleLiked } = useContext(FavoritesContext);
   const [favorites, setFavorites] = useState([]);
   const [showSidebar, setShowSidebar] = useState(false);
