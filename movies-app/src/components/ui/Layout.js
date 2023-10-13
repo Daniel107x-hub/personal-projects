@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
+import { Outlet } from "react-router-dom";
 import { GiHamburgerMenu } from "react-icons/gi";
 import Sidebar from "./Sidebar";
 import Gallery from "./Gallery";
@@ -17,10 +18,15 @@ function Layout({ children }) {
     const fetchMovies = async () => {
       if (favoriteIds.length > 0) {
         setIsLoading(true);
+        console.log(favoriteIds);
         try {
-          const requests = favoriteIds.map((id) => getMovieById(id));
+          const requests = favoriteIds.map((id) => {
+            const params = { movieId: id };
+            return getMovieById({ params });
+          });
           const responses = await Promise.all(requests);
-          const data = responses.map((response) => response.data);
+          const data = responses.map((response) => response.movie);
+          console.log(data);
           setFavorites(data);
         } catch (error) {
           console.error(error);
@@ -42,7 +48,9 @@ function Layout({ children }) {
         showSidebar ? "overflow-hidden" : "overflow-y-scroll"
       }`}
     >
-      <section className="h-10 font-bold">Movies App</section>
+      <section className="h-10 font-bold flex">
+        <h1>Movies App</h1>
+      </section>
       <span
         className={`bg-zinc-100 rounded-md text-red-500 p-2 hover:bg-zinc-200 cursor-pointer transition-all fixed z-10 ${
           showSidebar ? "hidden" : "right-[2%]"
@@ -64,7 +72,7 @@ function Layout({ children }) {
         )}
       </Sidebar>
       <section className="flex-1 flex flex-col relative items-center">
-        {children}
+        <Outlet />
       </section>
     </div>
   );

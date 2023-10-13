@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { BiSolidStar, BiSolidStarHalf } from "react-icons/bi";
 import { getImage } from "../../api/images";
@@ -13,7 +14,8 @@ function MovieTile({ movie, onLiked, isFav }) {
   }, [isFav]);
 
   const handleFavoriteClick = (e) => {
-    e.stopPropagation();
+    e.preventDefault(); // Prevent link action
+    e.stopPropagation(); // Prevent bubble phase to parent elements
     setIsFavorite((prev) => !prev);
     onLiked(movie.id);
   };
@@ -25,7 +27,7 @@ function MovieTile({ movie, onLiked, isFav }) {
   if (isFavorite || isHovered) icon = <AiFillHeart />;
 
   return (
-    <div className="flex flex-col">
+    <Link to={`movie/${movie.id}`} className="flex flex-col">
       <section className="rounded-lg overflow-hidden relative">
         <img src={getImage(poster_path)} alt="" />
         <span
@@ -44,7 +46,7 @@ function MovieTile({ movie, onLiked, isFav }) {
         <span className="release-date text-sm">{release_date}</span>
         <span className="vote text-xs flex flex-row">{scoreIcons}</span>
       </section>
-    </div>
+    </Link>
   );
 }
 
