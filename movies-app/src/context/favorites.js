@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useCallback, useState } from "react";
 
 const FavoritesContext = createContext();
 
@@ -14,9 +14,9 @@ function FavoritesProvider({ children }) {
     setFavoriteIds(updatedFavorites);
   };
 
-  const isFavorite = (id) => {
+  const isFavorite = useCallback((id) => {
     return favoriteIds.includes(id);
-  };
+  }, [favoriteIds]);
 
   return (
     <FavoritesContext.Provider

@@ -1,30 +1,30 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { BiSolidStar, BiSolidStarHalf } from "react-icons/bi";
 import { getImage } from "../../api/images";
 import "./MovieTile.css";
+import FavoritesContext from "../../context/favorites";
 
-function MovieTile({ movie, onLiked, isFav }) {
-  const [isFavorite, setIsFavorite] = useState(isFav || false);
+function MovieTile({ movie }) {
+  const {handleLiked, isFavorite} = useContext(FavoritesContext);
   const [isHovered, setIsHovered] = useState(false);
+  const [isLiked, setIsLiked] = useState(isFavorite(movie.id));
 
   useEffect(() => {
-    setIsFavorite(isFav || false);
-  }, [isFav]);
+    setIsLiked(isFavorite(movie.id));
+  }, [isFavorite]);
 
   const handleFavoriteClick = (e) => {
     e.preventDefault(); // Prevent link action
     e.stopPropagation(); // Prevent bubble phase to parent elements
-    setIsFavorite((prev) => !prev);
-    onLiked(movie.id);
+    handleLiked(movie.id);
   };
 
   const { poster_path, title, release_date, vote_average } = movie;
   const scoreIcons = getScoreStars(vote_average);
 
   let icon = <AiOutlineHeart />;
-  if (isFavorite || isHovered) icon = <AiFillHeart />;
+  if (isLiked || isHovered) icon = <AiFillHeart />;
 
   return (
     <div className="flex flex-col">

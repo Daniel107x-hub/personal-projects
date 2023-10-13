@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useContext } from "react";
 import { getMovieCard } from "../utils/movieUtils";
 import Gallery from "../components/ui/Gallery";
 import FavoritesContext from "../context/favorites";

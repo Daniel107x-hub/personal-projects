@@ -6,7 +6,6 @@ import FavoritesContext from "../context/favorites";
 function Movie() {
   const { handleLiked, isFavorite } = useContext(FavoritesContext);
   const { movie } = useLoaderData();
-  const MovieCard = getMovieCard(movie);
   return (
     <>
       <h1 className="mt-2 mb-6 text-xl">{movie.title}</h1>
