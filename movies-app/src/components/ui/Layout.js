@@ -50,7 +50,7 @@ function Layout() {
       </section>
       <span
         className={`bg-zinc-100 rounded-md text-red-500 p-2 hover:bg-zinc-200 cursor-pointer fixed z-10 top-5 ${
-          showSidebar ? "hidden" : "right-[1%]"
+          showSidebar ? "hidden" : "right-[8%] sm:right-[4%] lg:right-[2%]"
         } `}
         onClick={handleSidebar}
       >
