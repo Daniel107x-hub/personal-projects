@@ -44,7 +44,7 @@ function Layout() {
   return (
     <div className="bg-gray-800 font-jakarta flex flex-col justify-between text-zinc-200 p-2 h-screen overflow-y-auto">
       <section className="h-10 font-bold flex">
-        <Link to={"/"}>
+        <Link to={"/suggestions/1"}>
           <h1>Movies App</h1>
         </Link>
       </section>
