@@ -42,11 +42,7 @@ function Layout() {
   };
 
   return (
-    <div
-      className={`bg-gray-800 font-jakarta flex flex-col justify-between text-zinc-200 p-2 h-screen ${
-        showSidebar ? "overflow-y-hidden" : "overflow-y-auto"
-      }`}
-    >
+    <div className="bg-gray-800 font-jakarta flex flex-col justify-between text-zinc-200 p-2 h-screen overflow-y-auto">
       <section className="h-10 font-bold flex">
         <Link to={"/"}>
           <h1>Movies App</h1>
@@ -72,12 +68,19 @@ function Layout() {
         {favoriteIds.length > 0 && !isLoading && (
           <Gallery>
             {favorites.map((movie) => {
-              const {id, title, poster_path, vote_average, release_date} = movie;
+              const { id, title, poster_path, vote_average, release_date } =
+                movie;
               return (
                 <Link to={`movie/${movie.id}`} key={movie.id}>
-                  <MovieTile id={id} title={title} poster={poster_path} rating={vote_average} date={release_date}/>
+                  <MovieTile
+                    id={id}
+                    title={title}
+                    poster={poster_path}
+                    rating={vote_average}
+                    date={release_date}
+                  />
                 </Link>
-              )
+              );
             })}
           </Gallery>
         )}
