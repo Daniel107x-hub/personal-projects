@@ -17,16 +17,12 @@ import { discoverMovies, getMovieById } from "./api/movies";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route
-      exact
-      path="/"
-      element={
-        <Layout>
-          <Navigate replace to="suggestions/1" />
-        </Layout>
-      }
-      errorElement={<Error />}
-    >
+    <Route element={<Layout/>}>
+      <Route
+        path="/"
+        element={<Navigate replace to="suggestions/1" />}
+        errorElement={<Error />}
+      />
       <Route
         exact
         path="suggestions/:page"

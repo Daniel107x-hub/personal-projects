@@ -9,7 +9,6 @@ const discoverMovies = async ({ params }) => {
       },
     }
   );
-  console.log(movies);
   return { movies: movies.data.results };
 };
 

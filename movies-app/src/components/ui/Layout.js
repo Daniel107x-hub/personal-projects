@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useState } from "react";
-import { Outlet } from "react-router-dom";
+import React, { useContext, useEffect, useState, useRef } from "react";
+import { Outlet, useLocation } from "react-router-dom";
 import { GiHamburgerMenu } from "react-icons/gi";
 import Sidebar from "./Sidebar";
 import Gallery from "./Gallery";
@@ -14,6 +14,16 @@ function Layout() {
   const [favorites, setFavorites] = useState([]);
   const [showSidebar, setShowSidebar] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const { pathname } = useLocation();
+  const topRef = useRef(null);
+
+  const executeScroll = () => {
+    topRef.current.scrollIntoView(false);
+  }
+
+  useEffect(() => {
+    executeScroll();
+  }, [pathname])
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -43,8 +53,8 @@ function Layout() {
 
   return (
     <div className="bg-gray-800 font-jakarta flex flex-col justify-between text-zinc-200 p-2 h-screen overflow-y-auto">
-      <section className="h-10 font-bold flex">
-        <Link to={"/suggestions/1"}>
+      <section className="h-10 font-bold flex" ref={topRef}>
+        <Link to={"/"}>
           <h1>Movies App</h1>
         </Link>
       </section>
