@@ -18,7 +18,7 @@ function Movie() {
         <h2>{runtime} minutes</h2>
         <div className="genres flex flex-row space-x-2 my-2">
           {genres.map((genre) => (
-            <Card>{genre.name}</Card>
+            <Card key={genre.name}>{genre.name}</Card>
           ))}
         </div>
         <p className="text-lg">{overview}</p>

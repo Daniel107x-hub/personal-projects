@@ -8,6 +8,7 @@ import loading from "../../loading.gif";
 import FavoritesContext from "../../context/favorites";
 import { Link } from "react-router-dom";
 import MovieTile from "../movies/MovieTile";
+import SearchBar from "../movies/SearchBar";
 
 function Layout() {
   const { favoriteIds } = useContext(FavoritesContext);
@@ -53,10 +54,15 @@ function Layout() {
 
   return (
     <div className="bg-gray-800 font-jakarta flex flex-col justify-between text-zinc-200 p-2 h-screen overflow-y-auto">
-      <section className="h-10 font-bold flex" ref={topRef}>
-        <Link to={"/"}>
-          <h1>Movies App</h1>
-        </Link>
+      <section className="h-10 font-bold grid grid-cols-3" ref={topRef}>
+        <div>
+          <Link to={"/"}>
+            <h1>Movies App</h1>
+          </Link>
+        </div>
+        <div className="flex justify-center">
+          <SearchBar />
+        </div>
       </section>
       <span
         className={`bg-zinc-100 rounded-md text-red-500 p-2 hover:bg-zinc-200 cursor-pointer fixed z-10 top-5 ${
