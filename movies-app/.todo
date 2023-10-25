@@ -1,1 +1,5 @@
-- Add search bar
+- Analyze search bar behavior
+- Don't show until results searched
+- Restart to blank after moving from page
+- Analyze issue with image sizing
+- Add default image if poster not found in images API

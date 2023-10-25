@@ -53,16 +53,12 @@ function Layout() {
   };
 
   return (
-    <div className="bg-gray-800 font-jakarta flex flex-col justify-between text-zinc-200 p-2 h-screen overflow-y-auto">
-      <section className="h-10 font-bold grid grid-cols-3" ref={topRef}>
-        <div>
-          <Link to={"/"}>
-            <h1>Movies App</h1>
-          </Link>
-        </div>
-        <div className="flex justify-center">
-          <SearchBar />
-        </div>
+    <div className="bg-gray-800 font-jakarta flex flex-col text-zinc-200 p-2 h-screen overflow-y-auto">
+      <section className="h-10 font-bold flex flex-row" ref={topRef}>
+        <Link to={"/"}>
+          <h1>Movies App</h1>
+        </Link>
+        <SearchBar/>
       </section>
       <span
         className={`bg-zinc-100 rounded-md text-red-500 p-2 hover:bg-zinc-200 cursor-pointer fixed z-10 top-5 ${
@@ -72,7 +68,7 @@ function Layout() {
       >
         <GiHamburgerMenu />
       </span>
-      <section className="flex-1 flex flex-col items-center">
+      <section className="flex flex-col items-center">
         <Outlet />
       </section>
       <Sidebar isVisible={showSidebar} onClose={handleSidebar}>

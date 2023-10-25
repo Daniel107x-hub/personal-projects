@@ -16,7 +16,7 @@ function Suggestions() {
   );
 
   return (
-    <>
+    <div className="flex flex-col items-center">
       <h1 className="mt-2 mb-6 text-xl">Suggestions</h1>
       <Gallery>
         {movies.map((movie) => {
@@ -35,7 +35,7 @@ function Suggestions() {
         })}
       </Gallery>
       <Pagination onPageChange={handlePageChange} />
-    </>
+    </div>
   );
 }
 

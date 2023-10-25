@@ -24,4 +24,16 @@ const getMovieById = async ({ params }) => {
   return { movie: movie.data };
 };
 
-export { discoverMovies, getMovieById };
+const searchMovieByTitle = async (term) => {
+  const movies = await axios.get(
+    `https://api.themoviedb.org/3/search/movie?query=${term}`,
+    {
+      params: {
+        api_key: process.env.REACT_APP_TMDB_API_KEY,
+      },
+    }
+  );
+  return movies.data?.results;
+};
+
+export { discoverMovies, getMovieById, searchMovieByTitle };
